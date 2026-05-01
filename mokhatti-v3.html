@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="مخططي">
+<meta name="theme-color" content="#07080f">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%235b8dee' width='180' height='180' rx='30'/%3E%3Ctext x='90' y='125' font-size='95' text-anchor='middle' fill='white'%3E✓%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi2YXYrti32LfZiiIsInNob3J0X25hbWUiOiLZhdis2Le32YoiLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzA3MDgwZiIsInRoZW1lX2NvbG9yIjoiIzA3MDgwZiIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDE5MiAxOTInJTNFJTNDcmVjdCBmaWxsPSclMjM1YjhkZWUnIHdpZHRoPScxOTInIGhlaWdodD0nMTkyJyByeD0nMzInLyUzRSUzQ3RleHQgeD0nOTYnIHk9JzEzMCcgZm9udC1zaXplPScxMDAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZpbGw9J3doaXRlJyUzRSVFMiU5QyU5MyUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9XX0=">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>مخططي - إدارة المهام</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #07080f;
+  --bg-secondary: #0f111a;
+  --bg-card: #161925;
+  --bg-elevated: #1e2130;
+  --text-primary: #f0f2f5;
+  --text-secondary: #8b92a8;
+  --text-muted: #4a5068;
+  --accent-blue: #5b8dee;
+  --accent-purple: #a78bfa;
+  --accent-green: #34d399;
+  --accent-red: #f87171;
+  --accent-orange: #fbbf24;
+  --accent-pink: #f472b6;
+  --accent-cyan: #22d3ee;
+  --border: rgba(255,255,255,0.06);
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-arabic: 'Tajawal', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-arabic);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInScale { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes confetti { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-100px) rotate(720deg); opacity: 0; } }
+@keyframes barGrow { from { width: 0; } }
+@keyframes glow { 0%,100%{box-shadow:0 0 8px rgba(91,141,238,0.3);} 50%{box-shadow:0 0 20px rgba(91,141,238,0.6);} }
+@keyframes typewriter { from{width:0} to{width:100%} }
+
+.animate-fade { animation: fadeIn 0.4s ease forwards; }
+.animate-scale { animation: fadeInScale 0.35s ease forwards; }
+.animate-slide-up { animation: slideUp 0.5s ease forwards; }
+
+.app-container { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; padding-bottom: 80px; }
+.page { display: none; animation: fadeIn 0.3s ease; }
+.page.active { display: block; }
+
+/* Header */
+.app-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(7,8,15,0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-greeting { flex: 1; }
+.header-greeting .welcome-line {
+  font-size: 0.72rem; color: var(--text-muted); font-weight: 500; margin-bottom: 1px;
+}
+.header-greeting h1 {
+  font-size: 1.3rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1.2;
+}
+.header-greeting .subtitle { font-size: 0.7rem; color: var(--text-secondary); margin-top: 1px; }
+.header-logo {
+  font-size: 1.6rem; animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(91,141,238,0.4));
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  max-width: 480px; margin: 0 auto;
+  background: rgba(15,17,26,0.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around;
+  padding: 8px 0 16px; z-index: 1000;
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 3px; padding: 6px 16px; border-radius: 12px;
+  color: var(--text-muted); font-size: 0.62rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition); border: none; background: none;
+}
+.nav-item svg { width: 22px; height: 22px; transition: var(--transition); }
+.nav-item.active { color: var(--accent-blue); }
+.nav-item.active svg { stroke: var(--accent-blue); filter: drop-shadow(0 0 6px rgba(91,141,238,0.4)); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 20px; border-radius: var(--radius-sm);
+  border: none; font-family: var(--font-arabic); font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; transition: var(--transition);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: white; box-shadow: 0 4px 16px rgba(91,141,238,0.3);
+}
+.btn-primary:active { transform: scale(0.97); }
+.btn-secondary { background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border); }
+.btn-ghost { background: transparent; color: var(--text-secondary); padding: 8px 12px; }
+.btn-danger { background: rgba(248,113,113,0.15); color: var(--accent-red); }
+.btn-success { background: rgba(52,211,153,0.15); color: var(--accent-green); }
+.btn-video {
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  color: white; padding: 8px 14px; border-radius: 8px;
+  font-size: 0.8rem; box-shadow: 0 4px 12px rgba(255,0,0,0.3);
+  border: none; cursor: pointer; font-family: var(--font-arabic);
+  display: inline-flex; align-items: center; gap: 6px; font-weight: 700;
+  transition: var(--transition);
+}
+.btn-video:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(255,0,0,0.4); }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  transition: var(--transition);
+}
+.card:hover { border-color: rgba(91,141,238,0.2); transform: translateY(-1px); }
+
+.input {
+  width: 100%; padding: 12px 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-arabic); font-size: 0.9rem;
+  transition: var(--transition);
+}
+.input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(91,141,238,0.1); }
+.input::placeholder { color: var(--text-muted); }
+textarea.input { resize: vertical; min-height: 70px; }
+
+/* Countdown */
+.countdown-section {
+  margin: 16px 20px;
+  padding: 20px;
+  background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary));
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.countdown-section::before {
+  content: ''; position: absolute; top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(91,141,238,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.countdown-label { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 14px; font-weight: 500; }
+.countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.countdown-box {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  padding: 12px 4px;
+  border: 1px solid var(--border);
+}
+.countdown-number { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; color: var(--accent-blue); display: block; line-height: 1; }
+.countdown-unit { font-size: 0.62rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+.countdown-date { margin-top: 12px; font-size: 0.78rem; color: var(--text-secondary); }
+.countdown-date span { color: var(--accent-purple); font-weight: 700; }
+
+/* Progress */
+.overall-progress {
+  margin: 0 20px 16px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.overall-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.overall-progress-title { font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); }
+.overall-progress-value { font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: var(--accent-green); }
+.progress-track { height: 10px; background: var(--bg-elevated); border-radius: 5px; overflow: hidden; }
+.progress-fill {
+  height: 100%; border-radius: 5px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.progress-fill::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Circular Progress */
+.circular-progress { width: 48px; height: 48px; position: relative; flex-shrink: 0; }
+.circular-progress svg { transform: rotate(-90deg); }
+.circular-progress-bg { fill: none; stroke: var(--bg-elevated); stroke-width: 4; }
+.circular-progress-fill { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+.circular-progress-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; }
+
+/* Lists */
+.lists-section { padding: 0 20px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.section-title { font-size: 0.95rem; font-weight: 800; }
+.add-list-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: none; color: white; font-size: 1.4rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition); box-shadow: 0 4px 12px rgba(91,141,238,0.3);
+}
+.add-list-btn:active { transform: scale(0.9); }
+.lists-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.list-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.list-card::before {
+  content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%;
+  background: var(--list-color, var(--accent-blue)); opacity: 0.8;
+}
+.list-card:hover { transform: translateY(-3px); border-color: var(--list-color, var(--accent-blue)); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.list-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.list-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; background: var(--list-color-bg, rgba(91,141,238,0.15)); }
+.list-name { font-weight: 700; font-size: 0.88rem; }
+.list-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+.list-count { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; background: var(--bg-elevated); padding: 3px 8px; border-radius: 6px; }
+
+/* List Detail */
+.list-detail-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+.back-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-primary); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition);
+}
+.back-btn:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+.list-detail-title { font-size: 1rem; font-weight: 800; flex: 1; }
+.list-detail-actions { display: flex; gap: 8px; }
+.tasks-container { padding: 14px 20px; }
+.task-input-area { display: flex; gap: 8px; margin-bottom: 16px; }
+.task-input-area .input { flex: 1; }
+
+/* Task Filters */
+.task-filters { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
+.task-filter {
+  padding: 5px 12px; border-radius: 20px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-secondary); font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition); white-space: nowrap; font-family: var(--font-arabic);
+}
+.task-filter.active { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: white; border-color: transparent; }
+
+/* Task Item */
+.task-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  transition: var(--transition);
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+.task-item.dragging { opacity: 0.5; transform: scale(0.98); cursor: grabbing; }
+.task-item.completed { opacity: 0.6; }
+.task-item.completed .task-text { text-decoration: line-through; color: var(--text-muted); }
+.task-item.overdue { border-color: rgba(248,113,113,0.4); }
+.task-item.overdue::before { content: ''; position: absolute; top: 0; right: 0; width: 3px; height: 100%; background: var(--accent-red); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+.task-drag-handle { color: var(--text-muted); cursor: grab; padding: 4px; display: flex; align-items: center; padding-top: 6px; }
+.task-checkbox {
+  width: 22px; height: 22px; border-radius: 6px;
+  border: 2px solid var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition); flex-shrink: 0; margin-top: 2px;
+}
+.task-checkbox.checked { background: var(--accent-green); border-color: var(--accent-green); }
+.task-checkbox svg { width: 14px; height: 14px; stroke: white; stroke-width: 3; display: none; }
+.task-checkbox.checked svg { display: block; }
+
+.task-content { flex: 1; min-width: 0; cursor: pointer; }
+.task-text { font-size: 0.88rem; font-weight: 500; word-break: break-word; }
+.task-meta-row { display: flex; gap: 6px; margin-top: 4px; align-items: center; flex-wrap: wrap; }
+.task-priority { font-size: 0.62rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+.task-priority.high { background: rgba(248,113,113,0.15); color: var(--accent-red); }
+.task-priority.medium { background: rgba(251,191,36,0.15); color: var(--accent-orange); }
+.task-priority.low { background: rgba(52,211,153,0.15); color: var(--accent-green); }
+.task-deadline { font-size: 0.62rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; align-items: center; gap: 3px; }
+.task-deadline.urgent { color: var(--accent-red); }
+
+/* Video links inside tasks */
+.task-video-links { margin-top: 8px; display: flex; flex-direction: column; gap: 5px; }
+.task-video-link-row { display: flex; align-items: center; gap: 6px; }
+.task-video-link-row a {
+  font-size: 0.72rem; color: var(--accent-cyan); text-decoration: none;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;
+  background: rgba(34,211,238,0.08); padding: 2px 8px; border-radius: 6px;
+  border: 1px solid rgba(34,211,238,0.15);
+}
+.task-video-link-row a:hover { background: rgba(34,211,238,0.15); }
+.video-play-btn {
+  background: #ff0000; border: none; color: white;
+  width: 26px; height: 26px; border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition); flex-shrink: 0;
+}
+.video-play-btn:hover { background: #cc0000; transform: scale(1.1); }
+.video-play-btn svg { width: 12px; height: 12px; fill: white; }
+.video-label { font-size: 0.72rem; color: var(--text-secondary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.video-checkbox {
+  width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+  border: 2px solid var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition);
+}
+.video-checkbox.checked { background: var(--accent-green); border-color: var(--accent-green); }
+.video-checkbox svg { width: 10px; height: 10px; stroke: white; stroke-width: 3; display: none; }
+.video-checkbox.checked svg { display: block; }
+.video-label.done { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; }
+.video-progress { font-size: 0.65rem; color: var(--accent-green); font-family: var(--font-mono); margin-top: 4px; }
+
+.task-actions { display: flex; gap: 4px; align-items: flex-start; padding-top: 2px; }
+.task-delete {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: transparent; border: none; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition);
+}
+.task-delete:hover { background: rgba(248,113,113,0.15); color: var(--accent-red); }
+
+
+
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+.empty-state svg { width: 56px; height: 56px; margin-bottom: 12px; opacity: 0.3; }
+.empty-state p { font-size: 0.85rem; }
+
+/* Modals */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.modal-overlay.show { opacity: 1; visibility: visible; }
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%; max-width: 400px;
+  max-height: 88vh; overflow-y: auto;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.modal-overlay.show .modal { transform: scale(1) translateY(0); }
+.modal-header { padding: 18px 18px 0; display: flex; justify-content: space-between; align-items: center; }
+.modal-title { font-size: 1rem; font-weight: 800; }
+.modal-close {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.modal-close:hover { background: var(--accent-red); color: white; border-color: var(--accent-red); }
+.modal-body { padding: 14px 18px 18px; }
+.modal-footer { padding: 0 18px 18px; display: flex; gap: 10px; }
+.modal-footer .btn { flex: 1; }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
+
+/* Color & Icon pickers */
+.color-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.color-option {
+  width: 34px; height: 34px; border-radius: 50%;
+  cursor: pointer; border: 3px solid transparent;
+  transition: var(--transition);
+}
+.color-option.selected { border-color: white; box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--accent-blue); }
+.color-option:hover { transform: scale(1.1); }
+.icon-options { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.icon-option {
+  aspect-ratio: 1; border-radius: 10px;
+  background: var(--bg-elevated); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; cursor: pointer; transition: var(--transition);
+}
+.icon-option.selected { border-color: var(--accent-blue); background: rgba(91,141,238,0.15); }
+
+/* Priority Select */
+.priority-options { display: flex; gap: 8px; }
+.priority-option {
+  flex: 1; padding: 10px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 2px solid var(--border);
+  text-align: center; cursor: pointer; transition: var(--transition);
+  font-size: 0.78rem; font-weight: 600;
+}
+.priority-option.selected { border-color: var(--accent-blue); background: rgba(91,141,238,0.1); }
+
+/* Video URLs in task modal */
+.video-url-list { display: flex; flex-direction: column; gap: 8px; }
+.video-url-row { display: flex; gap: 6px; align-items: center; }
+.video-url-row .input { flex: 1; font-size: 0.8rem; padding: 9px 12px; direction: ltr; }
+.video-url-label { width: 80px; font-size: 0.75rem; padding: 9px 10px; }
+.remove-video-btn {
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.2);
+  color: var(--accent-red); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.remove-video-btn:hover { background: rgba(248,113,113,0.25); }
+.add-video-btn {
+  background: rgba(91,141,238,0.1); border: 1px dashed rgba(91,141,238,0.3);
+  color: var(--accent-blue); border-radius: var(--radius-sm);
+  padding: 8px; font-family: var(--font-arabic); font-size: 0.8rem;
+  cursor: pointer; transition: var(--transition); width: 100%;
+}
+.add-video-btn:hover { background: rgba(91,141,238,0.15); }
+
+/* Motivation Popup */
+.motivation-overlay {
+  position: fixed; inset: 0; z-index: 3000;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.motivation-overlay.show { opacity: 1; visibility: visible; }
+.motivation-card {
+  background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  text-align: center;
+  max-width: 360px; width: 100%;
+  position: relative;
+  transform: scale(0.8) translateY(30px);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.motivation-overlay.show .motivation-card { transform: scale(1) translateY(0); }
+.motivation-icon {
+  width: 68px; height: 68px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 18px; font-size: 2rem;
+  box-shadow: 0 8px 32px rgba(52,211,153,0.3);
+  animation: pulse 2s infinite;
+}
+.motivation-pair {
+  display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px;
+}
+.motivation-arabic {
+  font-size: 1.05rem; font-weight: 700; line-height: 1.7;
+  color: var(--text-primary);
+  background: rgba(91,141,238,0.08); padding: 10px 14px; border-radius: 10px;
+  border-right: 3px solid var(--accent-blue);
+}
+.motivation-english {
+  font-size: 0.85rem; font-weight: 500; line-height: 1.6;
+  color: var(--text-secondary); font-style: italic;
+  border-top: 1px solid var(--border); padding-top: 10px;
+  direction: ltr; text-align: left;
+}
+.motivation-author { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+.motivation-btn {
+  margin-top: 20px;
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+  color: white; border: none;
+  padding: 12px 32px; border-radius: 30px;
+  font-family: var(--font-arabic); font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; transition: var(--transition);
+  box-shadow: 0 4px 16px rgba(52,211,153,0.3);
+}
+.motivation-btn:active { transform: scale(0.95); }
+
+/* Confetti */
+.confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 2999; }
+.confetti-piece { position: absolute; width: 8px; height: 8px; animation: confetti 1.5s ease-out forwards; }
+
+/* Report */
+.report-header { padding: 20px; text-align: center; }
+.report-header h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+.report-header p { font-size: 0.78rem; color: var(--text-secondary); }
+.report-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 20px; margin-bottom: 18px; }
+.report-stat-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 12px; text-align: center; transition: var(--transition);
+}
+.report-stat-card:hover { border-color: var(--accent-blue); }
+.report-stat-value { font-family: var(--font-mono); font-size: 1.7rem; font-weight: 700; color: var(--accent-blue); display: block; margin-bottom: 4px; }
+.report-stat-label { font-size: 0.72rem; color: var(--text-secondary); font-weight: 500; }
+.weekly-chart { margin: 0 20px 18px; padding: 18px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); }
+.weekly-chart-title { font-size: 0.88rem; font-weight: 700; margin-bottom: 14px; }
+.chart-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 130px; gap: 6px; }
+.chart-bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.chart-bar {
+  width: 100%; max-width: 32px;
+  background: linear-gradient(to top, var(--accent-blue), var(--accent-purple));
+  border-radius: 6px 6px 0 0;
+  transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 4px; position: relative;
+}
+.chart-bar-value { position: absolute; top: -17px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-secondary); white-space: nowrap; }
+.chart-bar-label { font-size: 0.6rem; color: var(--text-muted); font-weight: 500; }
+.report-actions { padding: 0 20px 20px; display: flex; gap: 10px; }
+.report-actions .btn { flex: 1; }
+
+/* Focus Mode */
+.focus-overlay {
+  position: fixed; inset: 0; z-index: 2500;
+  background: var(--bg-primary);
+  display: none; flex-direction: column;
+}
+.focus-overlay.active { display: flex; }
+.focus-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; }
+.focus-header h2 { font-size: 1rem; font-weight: 800; }
+.focus-close {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-primary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.focus-content {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 16px;
+}
+.focus-task-select { width: 100%; max-width: 320px; margin-bottom: 20px; }
+.focus-task-select label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; }
+.focus-task-select select {
+  width: 100%; padding: 11px 14px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-primary);
+  font-family: var(--font-arabic); font-size: 0.88rem;
+}
+
+/* Focus Duration */
+.focus-duration-select { width: 100%; max-width: 320px; margin-bottom: 20px; }
+.focus-duration-select label { display: block; font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; }
+.duration-options { display: flex; gap: 8px; margin-bottom: 10px; }
+.duration-btn {
+  flex: 1; padding: 9px 4px; border-radius: 10px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-secondary); font-family: var(--font-arabic);
+  font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: var(--transition);
+}
+.duration-btn.selected {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(91,141,238,0.3);
+}
+.duration-btn:hover:not(.selected) { border-color: var(--accent-blue); color: var(--text-primary); }
+.custom-duration-row { display: flex; gap: 8px; align-items: center; }
+.custom-duration-row .input { flex: 1; font-size: 0.85rem; padding: 9px 12px; }
+.custom-duration-row .btn { padding: 9px 14px; font-size: 0.8rem; }
+
+.focus-timer-ring { width: 200px; height: 200px; position: relative; margin-bottom: 24px; }
+.focus-timer-ring svg { transform: rotate(-90deg); }
+.focus-ring-bg { fill: none; stroke: var(--bg-elevated); stroke-width: 6; }
+.focus-ring-progress {
+  fill: none; stroke: url(#focusGradient); stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+  filter: drop-shadow(0 0 8px rgba(91,141,238,0.4));
+}
+.focus-timer-display {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-family: var(--font-mono); font-size: 3rem; font-weight: 700;
+  color: var(--accent-blue); text-align: center; line-height: 1;
+  text-shadow: 0 0 30px rgba(91,141,238,0.3);
+}
+.focus-timer-label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 24px; }
+.focus-controls { display: flex; gap: 16px; }
+.focus-btn {
+  width: 60px; height: 60px; border-radius: 50%;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.focus-btn-start { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); box-shadow: 0 8px 32px rgba(52,211,153,0.3); }
+.focus-btn-pause { background: linear-gradient(135deg, var(--accent-orange), var(--accent-red)); box-shadow: 0 8px 32px rgba(251,191,36,0.3); }
+.focus-btn-reset { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-secondary); }
+.focus-btn:active { transform: scale(0.92); }
+.focus-btn svg { width: 22px; height: 22px; }
+
+/* ══════════════════════════
+   CONTACT PAGE — SENIOR DESIGN
+   ══════════════════════════ */
+.contact-page { padding: 20px; }
+
+
+
+.dev-profile-card {
+  background: linear-gradient(145deg, #0d1117, #0f1421);
+  border: 1px solid #21262d;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+
+.dev-profile-body { padding: 0 20px 20px; }
+.dev-avatar-wrap { margin-top: 0; margin-bottom: 12px; }
+.dev-avatar {
+  width: 70px; height: 70px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: 3px solid #0d1117;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 20px rgba(91,141,238,0.3);
+  animation: glow 3s ease-in-out infinite;
+}
+.dev-name { font-size: 1.2rem; font-weight: 900; margin-bottom: 2px; }
+.dev-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px;
+}
+.dev-title .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); flex-shrink: 0; box-shadow: 0 0 6px var(--accent-green); animation: pulse 2s infinite; }
+
+.dev-stats-row { display: flex; gap: 16px; margin-bottom: 16px; }
+.dev-stat { text-align: center; }
+.dev-stat-num { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: var(--accent-blue); }
+.dev-stat-label { font-size: 0.62rem; color: var(--text-muted); }
+
+.dev-skills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.skill-tag {
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 0.68rem; font-weight: 600;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.skill-tag.primary { background: rgba(91,141,238,0.12); border-color: rgba(91,141,238,0.25); color: var(--accent-blue); }
+.skill-tag.accent { background: rgba(167,139,250,0.12); border-color: rgba(167,139,250,0.25); color: var(--accent-purple); }
+.skill-tag.green { background: rgba(52,211,153,0.12); border-color: rgba(52,211,153,0.25); color: var(--accent-green); }
+
+/* Terminal Card */
+.terminal-window {
+  background: #0d1117; border: 1px solid #30363d;
+  border-radius: var(--radius); overflow: hidden;
+  margin-bottom: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+.terminal-header {
+  background: #161b22; padding: 9px 14px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid #30363d;
+}
+.terminal-btns { display: flex; gap: 6px; }
+.terminal-btns span { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.terminal-btns span:nth-child(1) { background: #ff5f56; }
+.terminal-btns span:nth-child(2) { background: #ffbd2e; }
+.terminal-btns span:nth-child(3) { background: #27c93f; }
+.terminal-title { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); flex: 1; text-align: center; }
+.terminal-body { padding: 14px; font-family: var(--font-mono); font-size: 0.76rem; line-height: 1.8; direction: ltr; text-align: left; }
+.terminal-line { margin-bottom: 2px; }
+.term-prompt { color: var(--accent-green); margin-right: 6px; }
+.term-cmd { color: var(--accent-blue); }
+.term-out { color: var(--text-secondary); padding-left: 18px; }
+.term-glow { color: var(--accent-green); text-shadow: 0 0 8px rgba(52,211,153,0.4); animation: pulse 2s infinite; }
+.term-cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent-green); margin-right: 2px; animation: pulse 1s infinite; vertical-align: text-bottom; }
+
+.dev-links { display: flex; flex-direction: column; gap: 10px; }
+.dev-link {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: var(--transition);
+  position: relative; overflow: hidden;
+}
+.dev-link::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(91,141,238,0.06), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.dev-link:hover::before { opacity: 1; }
+.dev-link:hover { border-color: var(--accent-blue); transform: translateX(-4px); box-shadow: 0 4px 20px rgba(91,141,238,0.15); }
+.dev-link-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: rgba(91,141,238,0.1);
+  border: 1px solid rgba(91,141,238,0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent-blue); flex-shrink: 0;
+}
+.dev-link-meta { flex: 1; }
+.dev-link-title { font-weight: 700; font-size: 0.88rem; }
+.dev-link-sub { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); margin-top: 1px; }
+
+.contact-footer { text-align: center; padding: 20px; }
+
+/* Settings */
+.settings-page { padding: 20px; }
+.settings-section { margin-bottom: 22px; }
+.settings-section-title {
+  font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);
+  margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+  display: flex; align-items: center; gap: 8px;
+}
+.settings-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Profile settings */
+.profile-settings-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px; margin-bottom: 14px;
+}
+.profile-row { display: flex; gap: 10px; align-items: flex-end; }
+.profile-row .form-group { flex: 1; margin-bottom: 0; }
+.profile-preview {
+  margin-top: 12px; padding: 12px;
+  background: var(--bg-elevated); border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 0.82rem; color: var(--text-secondary);
+}
+.profile-preview strong { color: var(--accent-blue); }
+
+/* Theme Grid */
+.theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.theme-option {
+  padding: 12px 6px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 2px solid var(--border);
+  text-align: center; cursor: pointer; transition: var(--transition);
+}
+.theme-option.selected { border-color: var(--accent-blue); }
+.theme-preview { width: 100%; height: 22px; border-radius: 6px; margin-bottom: 5px; }
+.theme-name { font-size: 0.68rem; font-weight: 600; }
+
+/* Toast */
+.toast-container {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 4000; display: flex; flex-direction: column; gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 11px 18px;
+  color: var(--text-primary); font-size: 0.82rem; font-weight: 600;
+  box-shadow: var(--shadow); animation: slideUp 0.3s ease;
+  pointer-events: auto; display: flex; align-items: center; gap: 8px;
+}
+.toast.success { border-color: var(--accent-green); }
+.toast.error { border-color: var(--accent-red); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 2px; }
+
+.svg-defs { position: absolute; width: 0; height: 0; }
+
+@media (max-width: 380px) {
+  .countdown-number { font-size: 1.2rem; }
+  .focus-timer-display { font-size: 2.5rem; }
+}
+</style>
+</head>
+<body>
+
+<svg class="svg-defs">
+  <defs>
+    <linearGradient id="focusGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#5b8dee"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="app-container">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-greeting">
+      <div class="welcome-line" id="header-welcome-line">مرحباً</div>
+      <h1 id="header-title">مخططي</h1>
+      <div class="subtitle">نظم مهامك · حقق أهدافك</div>
+    </div>
+
+  </header>
+
+  <!-- HOME PAGE -->
+  <div id="page-home" class="page active">
+
+    <!-- Countdown -->
+    <div class="countdown-section animate-slide-up">
+      <div class="countdown-label">⏳ الوقت المتبقي لتحقيق هدفك</div>
+      <div class="countdown-grid">
+        <div class="countdown-box">
+          <span class="countdown-number" id="cd-days">00</span>
+          <div class="countdown-unit">يوم</div>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-number" id="cd-hours">00</span>
+          <div class="countdown-unit">ساعة</div>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-number" id="cd-minutes">00</span>
+          <div class="countdown-unit">دقيقة</div>
+        </div>
+        <div class="countdown-box">
+          <span class="countdown-number" id="cd-seconds">00</span>
+          <div class="countdown-unit">ثانية</div>
+        </div>
+      </div>
+      <div class="countdown-date">
+        الهدف: <span id="target-date-display">لم يُحدد بعد</span>
+        <button class="btn-ghost" onclick="openTargetDateModal()" style="margin-right:8px;font-size:0.72rem;">تعديل</button>
+      </div>
+    </div>
+
+    <!-- Overall Progress -->
+    <div class="overall-progress animate-fade">
+      <div class="overall-progress-header">
+        <span class="overall-progress-title">📊 إنجازك الكلي</span>
+        <span class="overall-progress-value" id="overall-progress-value">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="overall-progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Lists -->
+    <div class="lists-section">
+      <div class="section-header">
+        <span class="section-title">📋 قوائمي</span>
+        <button class="add-list-btn" onclick="openAddListModal()">+</button>
+      </div>
+      <div class="lists-grid" id="lists-grid"></div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div style="padding:0 20px 20px; display:flex; gap:10px; margin-top:10px;">
+      <button class="btn btn-secondary" onclick="openFocusMode()" style="flex:1; gap:6px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        وضع التركيز
+      </button>
+      <button class="btn btn-secondary" onclick="showReportPage()" style="flex:1; gap:6px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        التقرير
+      </button>
+    </div>
+  </div>
+
+  <!-- LIST DETAIL PAGE -->
+  <div id="page-list-detail" class="page">
+    <div class="list-detail-header">
+      <button class="back-btn" onclick="showHomePage()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="list-detail-title" id="detail-list-name">قائمة</div>
+      <div class="list-detail-actions">
+        <button class="back-btn" onclick="openFocusModeForList()" title="وضع التركيز">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </button>
+        <button class="back-btn" onclick="openEditListModal()" title="تعديل">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="back-btn" onclick="deleteCurrentList()" title="حذف" style="color:var(--accent-red);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div style="padding:10px 20px; background:var(--bg-card); border-bottom:1px solid var(--border);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:7px;">
+        <span style="font-size:0.78rem; color:var(--text-secondary); font-weight:600;">تقدم القائمة</span>
+        <span style="font-family:var(--font-mono); font-size:0.82rem; font-weight:700; color:var(--accent-green);" id="detail-progress-text">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="detail-progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="tasks-container">
+      <div class="task-input-area">
+        <input type="text" class="input" id="new-task-input" placeholder="أضف مهمة جديدة..." onkeypress="if(event.key==='Enter') addTask()">
+        <button class="btn btn-primary" onclick="addTask()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+
+      <div class="task-filters">
+        <button class="task-filter active" onclick="setTaskFilter('all')" data-filter="all">الكل</button>
+        <button class="task-filter" onclick="setTaskFilter('pending')" data-filter="pending">معلقة</button>
+        <button class="task-filter" onclick="setTaskFilter('completed')" data-filter="completed">مكتملة</button>
+        <button class="task-filter" onclick="setTaskFilter('high')" data-filter="high">عالية</button>
+        <button class="task-filter" onclick="setTaskFilter('overdue')" data-filter="overdue">متأخرة</button>
+      </div>
+
+      <div id="tasks-list"></div>
+    </div>
+  </div>
+
+  <!-- REPORT PAGE -->
+  <div id="page-report" class="page">
+    <div class="list-detail-header">
+      <button class="back-btn" onclick="showHomePage()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="list-detail-title">تقرير الإنجاز</div>
+    </div>
+    <div class="report-header">
+      <h2>ملخص أدائك</h2>
+      <p id="report-period">هذا الأسبوع</p>
+    </div>
+    <div class="report-stats-grid">
+      <div class="report-stat-card"><span class="report-stat-value" id="stat-total-tasks">0</span><span class="report-stat-label">إجمالي المهام</span></div>
+      <div class="report-stat-card"><span class="report-stat-value" id="stat-completed">0</span><span class="report-stat-label">المكتملة</span></div>
+      <div class="report-stat-card"><span class="report-stat-value" id="stat-pending">0</span><span class="report-stat-label">المعلقة</span></div>
+      <div class="report-stat-card"><span class="report-stat-value" id="stat-rate">0%</span><span class="report-stat-label">نسبة الإنجاز</span></div>
+    </div>
+    <div class="weekly-chart">
+      <div class="weekly-chart-title">إنجازات الأسبوع</div>
+      <div class="chart-bars" id="weekly-chart-bars"></div>
+    </div>
+    <div class="report-actions">
+      <button class="btn btn-primary" onclick="shareReport()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        مشاركة التقرير
+      </button>
+      <button class="btn btn-secondary" onclick="showHomePage()">العودة</button>
+    </div>
+  </div>
+
+  <!-- CONTACT PAGE -->
+  <div id="page-contact" class="page">
+    <div class="contact-page">
+
+
+
+      <div class="dev-profile-card animate-scale">
+  
+        <div class="dev-profile-body">
+          <div class="dev-avatar-wrap">
+            <div class="dev-avatar">👨‍💻</div>
+          </div>
+          <div class="dev-name">Hazem Osman</div>
+          <div class="dev-title">
+            <div class="dot"></div>
+            Software Developer · Egypt 🇪🇬
+          </div>
+          <div class="dev-skills">
+            <span class="skill-tag primary">Python</span>
+            <span class="skill-tag green">Cloud Security</span>
+            <span class="skill-tag primary">PySide6</span>
+            <span class="skill-tag">Networking</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="terminal-window animate-fade">
+        <div class="terminal-header">
+          <div class="terminal-btns"><span></span><span></span><span></span></div>
+          <div class="terminal-title">hazem@senior-dev:~</div>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="term-prompt">$</span> <span class="term-cmd">whoami</span></div>
+          <div class="terminal-line term-out">Hazem Osman — Software Developer</div>
+          <div class="terminal-line"><span class="term-prompt">$</span> <span class="term-cmd">cat expertise.txt</span></div>
+          <div class="terminal-line term-out">Python · FastAPI · PySide6 · React · Cloud Security</div>
+          <div class="terminal-line"><span class="term-prompt">$</span> <span class="term-cmd">echo $STATUS</span></div>
+          <div class="terminal-line term-out term-glow">Available for freelance projects ✓</div>
+          <div class="terminal-line"><span class="term-prompt">$</span> <span class="term-cursor"></span></div>
+        </div>
+      </div>
+
+      <div class="dev-links">
+        <a class="dev-link" href="https://t.me/XO_HAZEM" target="_blank">
+          <span class="dev-link-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </span>
+          <div class="dev-link-meta">
+            <div class="dev-link-title">Telegram</div>
+            <div class="dev-link-sub">@XO_HAZEM · للتواصل السريع</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a class="dev-link" href="https://wa.me/201024430190" target="_blank">
+          <span class="dev-link-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </span>
+          <div class="dev-link-meta">
+            <div class="dev-link-title">WhatsApp</div>
+            <div class="dev-link-sub">+20 102 443 0190</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="contact-footer">
+        <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-muted);">Built with &lt;/&gt; · Python · React · Passion</div>
+        <div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--text-muted);margin-top:4px;">© 2025 Hazem Osman · Made in Egypt 🇪🇬</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PAGE -->
+  <div id="page-settings" class="page">
+    <div class="settings-page">
+
+      <!-- Profile Section -->
+      <div class="settings-section">
+        <div class="settings-section-title">👤 الملف الشخصي</div>
+        <div class="profile-settings-card">
+          <div class="form-group">
+            <label class="form-label">اللقب (مثال: دكتور، مهندس، أستاذ)</label>
+            <input type="text" class="input" id="user-title-input" placeholder="مثال: دكتور" style="margin-bottom:0;">
+          </div>
+          <div class="form-group" style="margin-top:12px;">
+            <label class="form-label">الاسم الأول</label>
+            <input type="text" class="input" id="user-name-input" placeholder="مثال: حازم" style="margin-bottom:0;">
+          </div>
+          <button class="btn btn-primary" onclick="saveUserProfile()" style="width:100%;margin-top:14px;">
+            💾 حفظ الملف الشخصي
+          </button>
+          <div class="profile-preview" id="profile-preview" style="margin-top:10px; display:none;">
+            سيظهر في الأعلى: <strong id="preview-text"></strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Themes -->
+      <div class="settings-section">
+        <div class="settings-section-title">🎨 الثيمات</div>
+        <div class="theme-grid" id="theme-grid"></div>
+      </div>
+
+      <!-- Data Management -->
+      <div class="settings-section">
+        <div class="settings-section-title">💾 إدارة البيانات</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button class="btn btn-secondary" onclick="exportData()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            تصدير البيانات
+          </button>
+          <button class="btn btn-secondary" onclick="importData()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            استيراد البيانات
+          </button>
+          <button class="btn btn-danger" onclick="clearAllData()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            مسح كل البيانات
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- app-container -->
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showHomePage()" data-nav="home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    الرئيسية
+  </button>
+  <button class="nav-item" onclick="showReportPage()" data-nav="report">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    التقرير
+  </button>
+  <button class="nav-item" onclick="showSettingsPage()" data-nav="settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    الإعدادات
+  </button>
+  <button class="nav-item" onclick="showContactPage()" data-nav="contact">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    تواصل
+  </button>
+</nav>
+
+<!-- MODALS -->
+
+<!-- Target Date Modal -->
+<div class="modal-overlay" id="target-date-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">تحديد موعد الهدف</span>
+      <button class="modal-close" onclick="closeModal('target-date-modal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">اختر التاريخ والوقت</label>
+        <input type="datetime-local" class="input" id="target-date-input">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveTargetDate()">حفظ</button>
+      <button class="btn btn-secondary" onclick="closeModal('target-date-modal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit List Modal -->
+<div class="modal-overlay" id="list-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="list-modal-title">قائمة جديدة</span>
+      <button class="modal-close" onclick="closeModal('list-modal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">اسم القائمة</label>
+        <input type="text" class="input" id="list-name-input" placeholder="مثال: مشروع التخرج">
+      </div>
+      <div class="form-group">
+        <label class="form-label">اللون</label>
+        <div class="color-options" id="list-color-options"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">الأيقونة</label>
+        <div class="icon-options" id="list-icon-options"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveList()">حفظ</button>
+      <button class="btn btn-secondary" onclick="closeModal('list-modal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Task Details Modal -->
+<div class="modal-overlay" id="task-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">تفاصيل المهمة</span>
+      <button class="modal-close" onclick="closeModal('task-modal')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">نص المهمة</label>
+        <input type="text" class="input" id="task-text-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">الأولوية</label>
+        <div class="priority-options" id="task-priority-options"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">موعد التسليم</label>
+        <input type="datetime-local" class="input" id="task-deadline-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">🎬 روابط فيديوهات المهمة</label>
+        <div class="video-url-list" id="video-url-list"></div>
+        <button class="add-video-btn" onclick="addVideoUrlField()">+ إضافة رابط فيديو</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveTaskDetails()">حفظ</button>
+      <button class="btn btn-secondary" onclick="closeModal('task-modal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Motivation Popup -->
+<div class="motivation-overlay" id="motivation-overlay">
+  <div class="confetti-container" id="confetti-container"></div>
+  <div class="motivation-card">
+    <div class="motivation-icon">🎉</div>
+    <div class="motivation-pair">
+      <div class="motivation-arabic" id="motivation-ar"></div>
+      <div class="motivation-english" id="motivation-en"></div>
+    </div>
+    <div class="motivation-author" id="motivation-author"></div>
+    <button class="motivation-btn" onclick="closeMotivation()">استمر في التقدم! 💪</button>
+  </div>
+</div>
+
+<!-- Focus Mode Overlay -->
+<div class="focus-overlay" id="focus-overlay">
+  <div class="focus-header">
+    <h2>⏱ وضع التركيز</h2>
+    <button class="focus-close" onclick="closeFocusMode()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="focus-content">
+    <div class="focus-task-select">
+      <label>اختر مهمة للتركيز عليها</label>
+      <select id="focus-task-select" onchange="onFocusTaskChange()">
+        <option value="">-- اختر مهمة --</option>
+      </select>
+    </div>
+
+    <!-- Custom Duration -->
+    <div class="focus-duration-select">
+      <label>مدة التركيز</label>
+      <div class="duration-options">
+        <button class="duration-btn" onclick="setFocusDuration(15, this)">15د</button>
+        <button class="duration-btn selected" onclick="setFocusDuration(25, this)">25د</button>
+        <button class="duration-btn" onclick="setFocusDuration(45, this)">45د</button>
+        <button class="duration-btn" onclick="setFocusDuration(60, this)">60د</button>
+      </div>
+      <div class="custom-duration-row">
+        <input type="number" class="input" id="custom-duration-input" placeholder="دقائق مخصصة..." min="1" max="180">
+        <button class="btn btn-secondary" onclick="applyCustomDuration()">تطبيق</button>
+      </div>
+    </div>
+
+    <div class="focus-timer-ring">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle class="focus-ring-bg" cx="100" cy="100" r="90"/>
+        <circle class="focus-ring-progress" id="focus-ring-progress" cx="100" cy="100" r="90"
+          stroke-dasharray="565.49" stroke-dashoffset="0"/>
+      </svg>
+      <div class="focus-timer-display" id="focus-timer-display">25:00</div>
+    </div>
+
+    <div class="focus-timer-label" id="focus-timer-status">جاهز للبدء</div>
+    <div class="focus-controls">
+      <button class="focus-btn focus-btn-reset" onclick="resetFocusTimer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      </button>
+      <button class="focus-btn focus-btn-start" id="focus-start-btn" onclick="toggleFocusTimer()">
+        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Hidden file input -->
+<input type="file" id="import-file-input" accept=".json" style="display:none" onchange="handleImportFile(event)">
+
+<script>
+// ═══════════════════════════════════════
+// PAIRED MOTIVATIONAL QUOTES (Arabic + English)
+// ═══════════════════════════════════════
+const PAIRED_QUOTES = [
+  {
+    ar: 'النجاح يأتي لمن يؤمن بقدرته على تحقيق أحلامه ولا يتوقف عن السعي.',
+    en: 'Success comes to those who believe in their dreams and never stop striving.',
+    author: 'إليانور روزفلت · Eleanor Roosevelt'
+  },
+  {
+    ar: 'لا تنتظر الفرصة المثالية؛ اصنعها بعزيمتك وإصرارك.',
+    en: 'Do not wait for the perfect opportunity; create it with your determination.',
+    author: ''
+  },
+  {
+    ar: 'كل خطوة صغيرة نحو هدفك هي انتصار يستحق الاحتفال.',
+    en: 'Every small step toward your goal is a victory worth celebrating.',
+    author: ''
+  },
+  {
+    ar: 'الطريق إلى العظمة يبدأ بقرار واحد: أن تبدأ الآن.',
+    en: 'The road to greatness begins with one decision: to start now.',
+    author: ''
+  },
+  {
+    ar: 'إن وقعت سبع مرات، فانهض ثماني مرات. هذه هي قوة الإنسان الحقيقية.',
+    en: 'Fall seven times, stand up eight. That is the true strength of a person.',
+    author: 'مثل ياباني · Japanese Proverb'
+  },
+  {
+    ar: 'لا يُهزم من يؤمن بأن كل صعوبة هي بداية لانتصار جديد.',
+    en: 'He who believes every difficulty is the beginning of a new victory is never defeated.',
+    author: ''
+  },
+  {
+    ar: 'الشجاعة ليست غياب الخوف، بل هي المضي قدماً رغم وجوده.',
+    en: 'Courage is not the absence of fear, but moving forward despite it.',
+    author: 'نيلسون مانديلا · Nelson Mandela'
+  },
+  {
+    ar: 'أنت أقوى مما تتخيل، وأجدر بالنجاح مما تعتقد.',
+    en: 'You are stronger than you imagine, and more deserving of success than you believe.',
+    author: 'أ.أ. ميلن · A.A. Milne'
+  },
+  {
+    ar: 'اليوم الذي تبدأ فيه هو أهم يوم في رحلتك نحو حلمك.',
+    en: 'The day you begin is the most important day in your journey toward your dream.',
+    author: ''
+  },
+  {
+    ar: 'عقلك هو أقوى سلاح تملكه؛ استخدمه لتحقيق ما تريد.',
+    en: 'Your mind is the most powerful weapon you possess; use it to achieve what you want.',
+    author: ''
+  },
+  {
+    ar: 'المثابرة هي السر الذي يحول الحلم العادي إلى إنجاز استثنائي.',
+    en: 'Perseverance is the secret that transforms an ordinary dream into an extraordinary achievement.',
+    author: ''
+  },
+  {
+    ar: 'لا تقيس نجاحك بما حققته فحسب، بل بما أصبحت عليه من خلال مسيرتك.',
+    en: 'Do not measure your success only by what you have achieved, but by who you have become through your journey.',
+    author: 'ستيف جوبز · Steve Jobs'
+  },
+  {
+    ar: 'المستحيل مجرد كلمة تقولها من لم يجرب بعد.',
+    en: 'Impossible is just a word said by those who have not tried yet.',
+    author: ''
+  },
+  {
+    ar: 'كن التغيير الذي تريد أن تراه في العالم، فالتغيير يبدأ منك أنت.',
+    en: 'Be the change you wish to see in the world, for change begins with you.',
+    author: 'غاندي · Mahatma Gandhi'
+  },
+  {
+    ar: 'العمل الجاد يتفوق على الموهبة حين لا تعمل الموهبة بجد.',
+    en: 'Hard work beats talent when talent does not work hard.',
+    author: 'تيم نوتكي · Tim Notke'
+  },
+  {
+    ar: 'المستقبل ينتمي للذين يؤمنون بجمال أحلامهم ويعملون لتحقيقها.',
+    en: 'The future belongs to those who believe in the beauty of their dreams and work to achieve them.',
+    author: ''
+  },
+  {
+    ar: 'حين تشعر برغبة في الاستسلام، تذكّر لماذا بدأت.',
+    en: 'When you feel like giving up, remember why you started.',
+    author: ''
+  },
+  {
+    ar: 'الفشل ليس نهاية الطريق؛ إنه مجرد منعطف نحو النجاح.',
+    en: 'Failure is not the end of the road; it is merely a turn toward success.',
+    author: 'ونستون تشرشل · Winston Churchill'
+  },
+  {
+    ar: 'كل يوم هو فرصة جديدة لتكون أفضل مما كنت عليه أمس.',
+    en: 'Every day is a new opportunity to be better than you were yesterday.',
+    author: ''
+  },
+  {
+    ar: 'لا تسمح لأحد أن يحدد حدود طموحاتك؛ أنت وحدك تصنع سقفك.',
+    en: 'Do not let anyone define the limits of your ambitions; you alone set your ceiling.',
+    author: 'ميشيل أوباما · Michelle Obama'
+  }
+];
+
+// ═══════════════════════════════════════
+// DATA & STATE
+// ═══════════════════════════════════════
+const STORAGE_KEY = 'mokhatti_data_v3';
+const THEMES = [
+  { id: 'ocean', name: 'محيطي', colors: { blue: '#5b8dee', purple: '#a78bfa', green: '#34d399', red: '#f87171', orange: '#fbbf24', pink: '#f472b6', cyan: '#22d3ee' } },
+  { id: 'sunset', name: 'غروب', colors: { blue: '#f97316', purple: '#ec4899', green: '#fbbf24', red: '#ef4444', orange: '#fb923c', pink: '#f472b6', cyan: '#fde047' } },
+  { id: 'forest', name: 'غابة', colors: { blue: '#10b981', purple: '#84cc16', green: '#22c55e', red: '#ef4444', orange: '#f59e0b', pink: '#ec4899', cyan: '#06b6d4' } },
+  { id: 'berry', name: 'توت', colors: { blue: '#8b5cf6', purple: '#d946ef', green: '#10b981', red: '#f43f5e', orange: '#f97316', pink: '#ec4899', cyan: '#06b6d4' } },
+  { id: 'midnight', name: 'منتصف الليل', colors: { blue: '#3b82f6', purple: '#6366f1', green: '#14b8a6', red: '#f43f5e', orange: '#f59e0b', pink: '#e879f9', cyan: '#22d3ee' } },
+  { id: 'warm', name: 'دافئ', colors: { blue: '#f59e0b', purple: '#f97316', green: '#84cc16', red: '#dc2626', orange: '#ea580c', pink: '#fb7185', cyan: '#2dd4bf' } }
+];
+const LIST_COLORS = [
+  { value: '#5b8dee', bg: 'rgba(91,141,238,0.15)' },
+  { value: '#a78bfa', bg: 'rgba(167,139,250,0.15)' },
+  { value: '#34d399', bg: 'rgba(52,211,153,0.15)' },
+  { value: '#f87171', bg: 'rgba(248,113,113,0.15)' },
+  { value: '#fbbf24', bg: 'rgba(251,191,36,0.15)' },
+  { value: '#f472b6', bg: 'rgba(244,114,182,0.15)' },
+  { value: '#22d3ee', bg: 'rgba(34,211,238,0.15)' },
+  { value: '#fb923c', bg: 'rgba(251,146,60,0.15)' }
+];
+const LIST_ICONS = ['📚','💼','🏋️','🎨','💻','🎯','✈️','🏠','💰','🎓','📝','🔬','🎵','🍳','🌱','⚽','🎮','🛒','🔧','📊'];
+const PRIORITIES = [
+  { value: 'high', label: 'عالية', color: 'var(--accent-red)' },
+  { value: 'medium', label: 'متوسطة', color: 'var(--accent-orange)' },
+  { value: 'low', label: 'منخفضة', color: 'var(--accent-green)' }
+];
+
+let appData = {
+  targetDate: null,
+  lists: [],
+  theme: 'ocean',
+  weeklyStats: {},
+  userName: '',
+  userTitle: ''
+};
+let currentListId = null;
+let currentTaskFilter = 'all';
+let editingListId = null;
+let editingTaskId = null;
+let countdownInterval = null;
+let focusTimerInterval = null;
+let focusTimerSeconds = 25 * 60;
+let focusTimerRunning = false;
+let focusTimerTotal = 25 * 60;
+let selectedFocusDuration = 25;
+let selectedListColor = LIST_COLORS[0].value;
+let selectedListIcon = LIST_ICONS[0];
+let selectedTaskPriority = 'medium';
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+function init() {
+  loadData();
+  applyTheme(appData.theme);
+  renderLists();
+  renderThemeOptions();
+  renderListModalOptions();
+  renderTaskModalOptions();
+  startCountdown();
+  updateOverallProgress();
+  updateHeaderGreeting();
+  loadProfileFields();
+}
+
+function updateHeaderGreeting() {
+  const welcomeLine = document.getElementById('header-welcome-line');
+  const title = document.getElementById('header-title');
+  if (appData.userName) {
+    const fullName = (appData.userTitle ? appData.userTitle + ' ' : '') + appData.userName;
+    welcomeLine.textContent = 'مرحباً،';
+    title.textContent = fullName;
+  } else {
+    welcomeLine.textContent = 'مرحباً بك في';
+    title.textContent = 'مخططي';
+  }
+}
+
+function loadProfileFields() {
+  document.getElementById('user-name-input').value = appData.userName || '';
+  document.getElementById('user-title-input').value = appData.userTitle || '';
+  updateProfilePreview();
+}
+
+function updateProfilePreview() {
+  const nameVal = document.getElementById('user-name-input').value.trim();
+  const titleVal = document.getElementById('user-title-input').value.trim();
+  const preview = document.getElementById('profile-preview');
+  const previewText = document.getElementById('preview-text');
+  if (nameVal) {
+    preview.style.display = 'block';
+    previewText.textContent = (titleVal ? titleVal + ' ' : '') + nameVal;
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'user-name-input' || e.target.id === 'user-title-input') {
+    updateProfilePreview();
+  }
+});
+
+function saveUserProfile() {
+  appData.userName = document.getElementById('user-name-input').value.trim();
+  appData.userTitle = document.getElementById('user-title-input').value.trim();
+  saveData();
+  updateHeaderGreeting();
+  showToast('تم حفظ الملف الشخصي ✓');
+}
+
+// ═══════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════
+function loadData() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      appData = { ...appData, ...parsed };
+    }
+  } catch (e) { console.error('Load error:', e); }
+  if (!appData.lists) appData.lists = [];
+  if (!appData.weeklyStats) appData.weeklyStats = {};
+  if (!appData.theme) appData.theme = 'ocean';
+  if (!appData.userName) appData.userName = '';
+  if (!appData.userTitle) appData.userTitle = '';
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+  } catch (e) {
+    showToast('خطأ في الحفظ', 'error');
+  }
+}
+
+// ═══════════════════════════════════════
+// THEME
+// ═══════════════════════════════════════
+function applyTheme(themeId) {
+  const theme = THEMES.find(t => t.id === themeId);
+  if (!theme) return;
+  const root = document.documentElement;
+  Object.entries(theme.colors).forEach(([key, val]) => {
+    root.style.setProperty('--accent-' + key, val);
+  });
+  appData.theme = themeId;
+  saveData();
+  renderThemeOptions();
+}
+
+function renderThemeOptions() {
+  const grid = document.getElementById('theme-grid');
+  if (!grid) return;
+  grid.innerHTML = THEMES.map(t => `
+    <div class="theme-option ${appData.theme === t.id ? 'selected' : ''}" onclick="applyTheme('${t.id}')">
+      <div class="theme-preview" style="background: linear-gradient(135deg, ${t.colors.blue}, ${t.colors.purple});"></div>
+      <div class="theme-name">${t.name}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page-' + pageId);
+  if (page) page.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function showHomePage() {
+  showPage('home');
+  updateNav('home');
+  renderLists();
+  updateOverallProgress();
+  startCountdown();
+}
+function showContactPage() { showPage('contact'); updateNav('contact'); }
+function showSettingsPage() { showPage('settings'); updateNav('settings'); renderThemeOptions(); loadProfileFields(); }
+function showReportPage() { showPage('report'); updateNav('report'); renderReport(); }
+
+function updateNav(active) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const nav = document.querySelector('.nav-item[data-nav="' + active + '"]');
+  if (nav) nav.classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// COUNTDOWN
+// ═══════════════════════════════════════
+function startCountdown() {
+  if (countdownInterval) clearInterval(countdownInterval);
+  updateCountdown();
+  countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+function updateCountdown() {
+  const display = document.getElementById('target-date-display');
+  if (!appData.targetDate) {
+    ['days','hours','minutes','seconds'].forEach(u => document.getElementById('cd-'+u).textContent = '00');
+    if (display) display.textContent = 'لم يُحدد بعد';
+    return;
+  }
+  const diff = new Date(appData.targetDate) - new Date();
+  if (diff <= 0) {
+    ['days','hours','minutes','seconds'].forEach(u => document.getElementById('cd-'+u).textContent = '00');
+    if (display) display.textContent = 'لقد حان الوقت! 🎉';
+    return;
+  }
+  document.getElementById('cd-days').textContent = String(Math.floor(diff / 86400000)).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0');
+  document.getElementById('cd-minutes').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+  document.getElementById('cd-seconds').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
+  if (display) display.textContent = new Date(appData.targetDate).toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function openTargetDateModal() {
+  const input = document.getElementById('target-date-input');
+  if (appData.targetDate) {
+    input.value = new Date(appData.targetDate).toISOString().slice(0,16);
+  } else {
+    const d = new Date(); d.setDate(d.getDate()+7);
+    input.value = d.toISOString().slice(0,16);
+  }
+  document.getElementById('target-date-modal').classList.add('show');
+}
+
+function saveTargetDate() {
+  const val = document.getElementById('target-date-input').value;
+  if (val) { appData.targetDate = new Date(val).toISOString(); saveData(); updateCountdown(); showToast('تم حفظ موعد الهدف ✓'); }
+  closeModal('target-date-modal');
+}
+
+// ═══════════════════════════════════════
+// LISTS
+// ═══════════════════════════════════════
+function renderLists() {
+  const grid = document.getElementById('lists-grid');
+  if (!grid) return;
+  if (!appData.lists.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      <p>لا توجد قوائم بعد. أنشئ قائمتك الأولى!</p></div>`;
+    return;
+  }
+  grid.innerHTML = appData.lists.map(list => {
+    const total = list.tasks ? list.tasks.length : 0;
+    const done = list.tasks ? list.tasks.filter(t => t.completed).length : 0;
+    const pct = total > 0 ? Math.round((done/total)*100) : 0;
+    const colorObj = LIST_COLORS.find(c => c.value === list.color) || LIST_COLORS[0];
+    const circ = 2*Math.PI*18;
+    const offset = circ - (pct/100)*circ;
+    return `<div class="list-card" onclick="openList('${list.id}')" style="--list-color:${list.color};--list-color-bg:${colorObj.bg}">
+      <div class="list-card-header">
+        <div class="list-icon" style="background:${colorObj.bg};">${list.icon}</div>
+        <div class="list-name">${escapeHtml(list.name)}</div>
+      </div>
+      <div class="list-meta">
+        <span class="list-count">${done}/${total} مهمة</span>
+        <div class="circular-progress">
+          <svg width="48" height="48" viewBox="0 0 48 48">
+            <circle class="circular-progress-bg" cx="24" cy="24" r="18"/>
+            <circle class="circular-progress-fill" cx="24" cy="24" r="18" stroke="${list.color}" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+          </svg>
+          <span class="circular-progress-text" style="color:${list.color};">${pct}%</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openList(listId) {
+  currentListId = listId;
+  const list = appData.lists.find(l => l.id === listId);
+  if (!list) return;
+  document.getElementById('detail-list-name').textContent = list.name;
+  document.getElementById('new-task-input').value = '';
+  currentTaskFilter = 'all';
+  updateTaskFilters();
+  renderTasks();
+  showPage('list-detail');
+  updateNav('');
+}
+
+function updateOverallProgress() {
+  let total = 0, done = 0;
+  appData.lists.forEach(l => { if (l.tasks) { total += l.tasks.length; done += l.tasks.filter(t => t.completed).length; } });
+  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  const bar = document.getElementById('overall-progress-bar');
+  const val = document.getElementById('overall-progress-value');
+  if (bar) bar.style.width = pct + '%';
+  if (val) val.textContent = pct + '%';
+}
+
+// ═══════════════════════════════════════
+// LIST MODAL
+// ═══════════════════════════════════════
+function renderListModalOptions() {
+  const colorContainer = document.getElementById('list-color-options');
+  const iconContainer = document.getElementById('list-icon-options');
+  if (colorContainer) {
+    colorContainer.innerHTML = LIST_COLORS.map((c,i) => `
+      <div class="color-option ${i===0?'selected':''}" data-color="${c.value}"
+        style="background:${c.value};" onclick="selectListColor(this,'${c.value}')"></div>
+    `).join('');
+  }
+  if (iconContainer) {
+    iconContainer.innerHTML = LIST_ICONS.map((icon,i) => `
+      <div class="icon-option ${i===0?'selected':''}" data-icon="${icon}" onclick="selectListIcon(this,'${icon}')">${icon}</div>
+    `).join('');
+  }
+}
+
+function selectListColor(el, color) {
+  document.querySelectorAll('#list-color-options .color-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedListColor = color;
+}
+function selectListIcon(el, icon) {
+  document.querySelectorAll('#list-icon-options .icon-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedListIcon = icon;
+}
+
+function openAddListModal() {
+  editingListId = null;
+  document.getElementById('list-modal-title').textContent = 'قائمة جديدة';
+  document.getElementById('list-name-input').value = '';
+  selectedListColor = LIST_COLORS[0].value;
+  selectedListIcon = LIST_ICONS[0];
+  renderListModalOptions();
+  document.getElementById('list-modal').classList.add('show');
+}
+
+function openEditListModal() {
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list) return;
+  editingListId = currentListId;
+  document.getElementById('list-modal-title').textContent = 'تعديل القائمة';
+  document.getElementById('list-name-input').value = list.name;
+  selectedListColor = list.color;
+  selectedListIcon = list.icon;
+  renderListModalOptions();
+  setTimeout(() => {
+    document.querySelectorAll('#list-color-options .color-option').forEach(o => o.classList.toggle('selected', o.dataset.color === list.color));
+    document.querySelectorAll('#list-icon-options .icon-option').forEach(o => o.classList.toggle('selected', o.dataset.icon === list.icon));
+  }, 10);
+  document.getElementById('list-modal').classList.add('show');
+}
+
+function saveList() {
+  const name = document.getElementById('list-name-input').value.trim();
+  if (!name) { showToast('أدخل اسم القائمة', 'error'); return; }
+  if (editingListId) {
+    const list = appData.lists.find(l => l.id === editingListId);
+    if (list) { list.name = name; list.color = selectedListColor; list.icon = selectedListIcon; document.getElementById('detail-list-name').textContent = name; }
+  } else {
+    appData.lists.push({ id: 'list_'+Date.now(), name, color: selectedListColor, icon: selectedListIcon, tasks: [], createdAt: new Date().toISOString() });
+  }
+  saveData(); renderLists(); updateOverallProgress();
+  closeModal('list-modal');
+  showToast(editingListId ? 'تم التعديل ✓' : 'تمت الإضافة ✓');
+}
+
+function deleteCurrentList() {
+  if (!confirm('هل أنت متأكد من حذف هذه القائمة وكل مهامها؟')) return;
+  appData.lists = appData.lists.filter(l => l.id !== currentListId);
+  saveData(); showHomePage(); showToast('تم الحذف');
+}
+
+// ═══════════════════════════════════════
+// TASKS
+// ═══════════════════════════════════════
+function renderTasks() {
+  const container = document.getElementById('tasks-list');
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list || !list.tasks) { container.innerHTML = emptyStateHTML('لا توجد مهام'); updateDetailProgress(); return; }
+
+  let tasks = [...list.tasks];
+  const now = new Date();
+  if (currentTaskFilter === 'pending') tasks = tasks.filter(t => !t.completed);
+  else if (currentTaskFilter === 'completed') tasks = tasks.filter(t => t.completed);
+  else if (currentTaskFilter === 'high') tasks = tasks.filter(t => t.priority === 'high');
+  else if (currentTaskFilter === 'overdue') tasks = tasks.filter(t => t.deadline && !t.completed && new Date(t.deadline) < now);
+
+  if (!tasks.length) { container.innerHTML = emptyStateHTML('لا توجد مهام مطابقة'); updateDetailProgress(); return; }
+
+  container.innerHTML = tasks.map((task, index) => {
+    const isOverdue = task.deadline && !task.completed && new Date(task.deadline) < now;
+    const deadlineText = task.deadline ? formatDeadline(task.deadline, isOverdue) : '';
+    const priorityObj = PRIORITIES.find(p => p.value === task.priority) || PRIORITIES[1];
+
+    // Video sub-tasks with checkboxes
+    let videoHTML = '';
+    if (task.videos && task.videos.length > 0) {
+      const doneCount = task.videos.filter(v => v.done).length;
+      const totalVids = task.videos.length;
+      videoHTML = '<div class="task-video-links">' +
+        task.videos.map((v, vi) => {
+          const label = v.label || ('فيديو ' + (vi+1));
+          return `<div class="task-video-link-row">
+            <div class="video-checkbox ${v.done?'checked':''}" onclick="event.stopPropagation(); toggleVideoDone('${task.id}', ${vi})">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <button class="video-play-btn" onclick="event.stopPropagation(); playVideo('${escapeAttr(v.url)}')" title="تشغيل">
+              <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <span class="video-label ${v.done?'done':''}">${escapeHtml(label)}</span>
+          </div>`;
+        }).join('') +
+        `<div class="video-progress">${doneCount}/${totalVids} مكتمل</div>` +
+        '</div>';
+    }
+
+    return `<div class="task-item ${task.completed?'completed':''} ${isOverdue?'overdue':''}"
+        draggable="true" data-task-id="${task.id}" data-index="${index}">
+      <div class="task-drag-handle">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+      </div>
+      <div class="task-checkbox ${task.completed?'checked':''}" onclick="toggleTask('${task.id}')">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="task-content" onclick="openTaskModal('${task.id}')">
+        <div class="task-text">${escapeHtml(task.text)}</div>
+        <div class="task-meta-row">
+          <span class="task-priority ${task.priority||'medium'}">${priorityObj.label}</span>
+          ${deadlineText ? `<span class="task-deadline ${isOverdue?'urgent':''}">🕐 ${deadlineText}</span>` : ''}
+        </div>
+        ${videoHTML}
+      </div>
+      <div class="task-actions">
+        <button class="task-delete" onclick="event.stopPropagation(); deleteTask('${task.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+
+  setupDragAndDrop();
+  updateDetailProgress();
+}
+
+function toggleVideoDone(taskId, videoIndex) {
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list || !list.tasks) return;
+  const task = list.tasks.find(t => t.id === taskId);
+  if (!task || !task.videos) return;
+  task.videos[videoIndex].done = !task.videos[videoIndex].done;
+  // Auto-complete task when all videos done
+  if (task.videos.length > 0 && task.videos.every(v => v.done) && !task.completed) {
+    task.completed = true;
+    task.completedAt = new Date().toISOString();
+    recordWeeklyStat();
+    saveData();
+    renderTasks();
+    updateOverallProgress();
+    renderLists();
+    showMotivation();
+    createConfetti();
+    return;
+  }
+  saveData();
+  renderTasks();
+}
+
+function playVideo(url) {
+  if (!url) return;
+  window.open(url, '_blank');
+}
+
+function emptyStateHTML(msg) {
+  return `<div class="empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    <p>${msg}</p></div>`;
+}
+
+function formatDeadline(d, isOverdue) {
+  if (isOverdue) return 'متأخرة';
+  const diff = new Date(d) - new Date();
+  const days = Math.floor(diff/86400000);
+  const hours = Math.floor((diff%86400000)/3600000);
+  if (days > 0) return days + ' يوم';
+  if (hours > 0) return hours + ' ساعة';
+  return 'قريب جداً';
+}
+
+function updateDetailProgress() {
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list || !list.tasks) return;
+  const total = list.tasks.length;
+  const done = list.tasks.filter(t => t.completed).length;
+  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  const bar = document.getElementById('detail-progress-bar');
+  const txt = document.getElementById('detail-progress-text');
+  if (bar) bar.style.width = pct + '%';
+  if (txt) txt.textContent = pct + '%';
+}
+
+function addTask() {
+  const input = document.getElementById('new-task-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list) return;
+  if (!list.tasks) list.tasks = [];
+  list.tasks.push({ id: 'task_'+Date.now(), text, completed: false, priority: 'medium', deadline: null, videos: [], createdAt: new Date().toISOString(), completedAt: null });
+  saveData(); input.value = ''; renderTasks(); updateOverallProgress();
+  showToast('تمت إضافة المهمة ✓');
+}
+
+function toggleTask(taskId) {
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list || !list.tasks) return;
+  const task = list.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  task.completed = !task.completed;
+  if (task.completed) { task.completedAt = new Date().toISOString(); recordWeeklyStat(); showMotivation(); createConfetti(); }
+  else task.completedAt = null;
+  saveData(); renderTasks(); updateOverallProgress(); renderLists();
+}
+
+function deleteTask(taskId) {
+  if (!confirm('حذف هذه المهمة؟')) return;
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list || !list.tasks) return;
+  list.tasks = list.tasks.filter(t => t.id !== taskId);
+  saveData(); renderTasks(); updateOverallProgress(); renderLists();
+  showToast('تم الحذف');
+}
+
+function setTaskFilter(filter) { currentTaskFilter = filter; updateTaskFilters(); renderTasks(); }
+function updateTaskFilters() {
+  document.querySelectorAll('.task-filter').forEach(f => f.classList.toggle('active', f.dataset.filter === currentTaskFilter));
+}
+
+// ═══════════════════════════════════════
+// TASK MODAL WITH VIDEOS
+// ═══════════════════════════════════════
+function renderTaskModalOptions() {
+  const container = document.getElementById('task-priority-options');
+  if (!container) return;
+  container.innerHTML = PRIORITIES.map(p => `
+    <div class="priority-option" data-priority="${p.value}" onclick="selectTaskPriority(this,'${p.value}')">${p.label}</div>
+  `).join('');
+}
+
+function selectTaskPriority(el, priority) {
+  document.querySelectorAll('#task-priority-options .priority-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTaskPriority = priority;
+}
+
+let currentVideoUrls = [];
+
+function addVideoUrlField(url='', label='') {
+  currentVideoUrls.push({ url, label });
+  renderVideoUrlFields();
+}
+
+function removeVideoUrl(index) {
+  currentVideoUrls.splice(index, 1);
+  renderVideoUrlFields();
+}
+
+function renderVideoUrlFields() {
+  const container = document.getElementById('video-url-list');
+  container.innerHTML = currentVideoUrls.map((v, i) => `
+    <div class="video-url-row">
+      <input type="text" class="input video-url-label" placeholder="اسم الفيديو" value="${escapeAttr(v.label)}"
+        oninput="currentVideoUrls[${i}].label=this.value">
+      <input type="url" class="input" placeholder="https://youtube.com/..." value="${escapeAttr(v.url)}"
+        oninput="currentVideoUrls[${i}].url=this.value" style="direction:ltr; font-size:0.75rem;">
+      <button class="remove-video-btn" onclick="removeVideoUrl(${i})">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  `).join('');
+}
+
+function openTaskModal(taskId) {
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list || !list.tasks) return;
+  const task = list.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  editingTaskId = taskId;
+  document.getElementById('task-text-input').value = task.text;
+  selectedTaskPriority = task.priority || 'medium';
+  renderTaskModalOptions();
+  setTimeout(() => {
+    document.querySelectorAll('#task-priority-options .priority-option').forEach(o => o.classList.toggle('selected', o.dataset.priority === selectedTaskPriority));
+  }, 10);
+  const dl = document.getElementById('task-deadline-input');
+  dl.value = task.deadline ? new Date(task.deadline).toISOString().slice(0,16) : '';
+  currentVideoUrls = task.videos ? JSON.parse(JSON.stringify(task.videos)) : [];
+  renderVideoUrlFields();
+  document.getElementById('task-modal').classList.add('show');
+}
+
+function saveTaskDetails() {
+  const list = appData.lists.find(l => l.id === currentListId);
+  if (!list || !list.tasks) return;
+  const task = list.tasks.find(t => t.id === editingTaskId);
+  if (!task) return;
+  const text = document.getElementById('task-text-input').value.trim();
+  if (!text) { showToast('أدخل نص المهمة', 'error'); return; }
+  task.text = text;
+  task.priority = selectedTaskPriority;
+  const dlVal = document.getElementById('task-deadline-input').value;
+  task.deadline = dlVal ? new Date(dlVal).toISOString() : null;
+  task.videos = currentVideoUrls.filter(v => v.url.trim());
+  saveData(); renderTasks(); closeModal('task-modal'); showToast('تم الحفظ ✓');
+}
+
+// ═══════════════════════════════════════
+// DRAG & DROP
+// ═══════════════════════════════════════
+function setupDragAndDrop() {
+  const container = document.getElementById('tasks-list');
+  if (!container) return;
+  let draggedId = null, draggedItem = null;
+  container.querySelectorAll('.task-item').forEach(item => {
+    item.addEventListener('dragstart', function(e) {
+      draggedItem = this; draggedId = this.dataset.taskId;
+      this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move';
+    });
+    item.addEventListener('dragend', function() {
+      this.classList.remove('dragging'); draggedId = null; draggedItem = null;
+      container.querySelectorAll('.task-item').forEach(i => i.style.borderTop = '');
+    });
+    item.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      if (this === draggedItem) return;
+      const mid = this.getBoundingClientRect().top + this.getBoundingClientRect().height / 2;
+      this.style.borderTop = e.clientY < mid ? '2px solid var(--accent-blue)' : '';
+    });
+    item.addEventListener('dragleave', function() { this.style.borderTop = ''; });
+    item.addEventListener('drop', function(e) {
+      e.preventDefault(); this.style.borderTop = '';
+      if (!draggedId || this === draggedItem) return;
+      const list = appData.lists.find(l => l.id === currentListId);
+      if (!list || !list.tasks) return;
+      const from = list.tasks.findIndex(t => t.id === draggedId);
+      const to = parseInt(this.dataset.index);
+      if (from === -1) return;
+      const [moved] = list.tasks.splice(from, 1);
+      list.tasks.splice(to, 0, moved);
+      saveData(); renderTasks();
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+// MOTIVATION — PAIRED QUOTES
+// ═══════════════════════════════════════
+function showMotivation() {
+  const pair = PAIRED_QUOTES[Math.floor(Math.random() * PAIRED_QUOTES.length)];
+  document.getElementById('motivation-ar').textContent = pair.ar;
+  document.getElementById('motivation-en').textContent = pair.en;
+  document.getElementById('motivation-author').textContent = pair.author ? '— ' + pair.author : '';
+  document.getElementById('motivation-overlay').classList.add('show');
+}
+
+function closeMotivation() {
+  document.getElementById('motivation-overlay').classList.remove('show');
+  document.getElementById('confetti-container').innerHTML = '';
+}
+
+function createConfetti() {
+  const container = document.getElementById('confetti-container');
+  const colors = ['#5b8dee','#a78bfa','#34d399','#f87171','#fbbf24','#f472b6','#22d3ee'];
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.cssText = `left:${Math.random()*100}%;top:50%;background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      width:${4+Math.random()*6}px;height:${4+Math.random()*6}px;
+      animation-delay:${Math.random()*0.5}s;animation-duration:${1+Math.random()}s;`;
+    container.appendChild(p);
+  }
+}
+
+// ═══════════════════════════════════════
+// WEEKLY STATS
+// ═══════════════════════════════════════
+function recordWeeklyStat() {
+  const today = new Date().toISOString().split('T')[0];
+  if (!appData.weeklyStats) appData.weeklyStats = {};
+  appData.weeklyStats[today] = (appData.weeklyStats[today] || 0) + 1;
+  saveData();
+}
+
+function getWeekDays() {
+  const days = []; const today = new Date();
+  for (let i = 6; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate()-i); days.push(d); }
+  return days;
+}
+
+function renderReport() {
+  let total=0, done=0, pending=0;
+  appData.lists.forEach(l => { if (l.tasks) { total+=l.tasks.length; done+=l.tasks.filter(t=>t.completed).length; pending+=l.tasks.filter(t=>!t.completed).length; } });
+  const rate = total>0 ? Math.round((done/total)*100) : 0;
+  document.getElementById('stat-total-tasks').textContent = total;
+  document.getElementById('stat-completed').textContent = done;
+  document.getElementById('stat-pending').textContent = pending;
+  document.getElementById('stat-rate').textContent = rate + '%';
+  const weekDays = getWeekDays();
+  const dayNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const maxVal = Math.max(...weekDays.map(d => appData.weeklyStats[d.toISOString().split('T')[0]]||0), 1);
+  document.getElementById('weekly-chart-bars').innerHTML = weekDays.map(d => {
+    const dateStr = d.toISOString().split('T')[0];
+    const val = appData.weeklyStats[dateStr] || 0;
+    const h = (val/maxVal)*100;
+    return `<div class="chart-bar-wrapper">
+      <div class="chart-bar" style="height:${h}%;">${val>0?`<span class="chart-bar-value">${val}</span>`:''}</div>
+      <span class="chart-bar-label">${dayNames[d.getDay()]}</span>
+    </div>`;
+  }).join('');
+}
+
+function shareReport() {
+  let total=0, done=0;
+  appData.lists.forEach(l => { if (l.tasks) { total+=l.tasks.length; done+=l.tasks.filter(t=>t.completed).length; } });
+  const rate = total>0 ? Math.round((done/total)*100) : 0;
+  const weekDays = getWeekDays();
+  const dayNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  let weeklyText = '';
+  weekDays.forEach(d => { const v = appData.weeklyStats[d.toISOString().split('T')[0]]||0; weeklyText += dayNames[d.getDay()]+': '+v+' مهمة\n'; });
+  const userName = appData.userName ? ((appData.userTitle?appData.userTitle+' ':'')+appData.userName) : '';
+  const text = `📊 تقرير إنجازي${userName?' - '+userName:''} - مخططي\n━━━━━━━━━━━━━━\n✅ المكتملة: ${done}\n📋 الإجمالي: ${total}\n📈 نسبة الإنجاز: ${rate}%\n\n📅 إنجازات الأسبوع:\n${weeklyText}━━━━━━━━━━━━━━\n💪 استمر في التقدم!\n🚀 تطبيق مخططي`;
+  window.open('https://wa.me/?text='+encodeURIComponent(text), '_blank');
+}
+
+// ═══════════════════════════════════════
+// FOCUS MODE
+// ═══════════════════════════════════════
+function openFocusMode() { populateFocusTasks(); document.getElementById('focus-overlay').classList.add('active'); }
+function openFocusModeForList() { populateFocusTasks(); document.getElementById('focus-overlay').classList.add('active'); }
+function closeFocusMode() { document.getElementById('focus-overlay').classList.remove('active'); resetFocusTimer(); }
+
+function populateFocusTasks() {
+  const select = document.getElementById('focus-task-select');
+  select.innerHTML = '<option value="">-- اختر مهمة --</option>';
+  appData.lists.forEach(list => {
+    if (list.tasks) {
+      list.tasks.filter(t => !t.completed).forEach(task => {
+        const opt = document.createElement('option');
+        opt.value = list.id+'|'+task.id;
+        opt.textContent = list.name+' - '+task.text;
+        select.appendChild(opt);
+      });
+    }
+  });
+}
+
+function onFocusTaskChange() { resetFocusTimer(); }
+
+function setFocusDuration(minutes, el) {
+  if (focusTimerRunning) { showToast('أوقف المؤقت أولاً', 'error'); return; }
+  selectedFocusDuration = minutes;
+  focusTimerTotal = minutes * 60;
+  focusTimerSeconds = focusTimerTotal;
+  document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  updateFocusDisplay();
+  document.getElementById('focus-timer-status').textContent = 'جاهز للبدء';
+}
+
+function applyCustomDuration() {
+  const val = parseInt(document.getElementById('custom-duration-input').value);
+  if (!val || val < 1 || val > 180) { showToast('أدخل قيمة بين 1 و 180 دقيقة', 'error'); return; }
+  document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('selected'));
+  setFocusDuration(val, null);
+  showToast('تم ضبط المؤقت على ' + val + ' دقيقة ✓');
+}
+
+function toggleFocusTimer() {
+  if (focusTimerRunning) pauseFocusTimer(); else startFocusTimer();
+}
+
+function startFocusTimer() {
+  if (!document.getElementById('focus-task-select').value) { showToast('اختر مهمة أولاً', 'error'); return; }
+  focusTimerRunning = true;
+  const btn = document.getElementById('focus-start-btn');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+  btn.className = 'focus-btn focus-btn-pause';
+  document.getElementById('focus-timer-status').textContent = 'جاري التركيز...';
+  focusTimerInterval = setInterval(() => {
+    if (focusTimerSeconds > 0) { focusTimerSeconds--; updateFocusDisplay(); }
+    else { stopFocusTimer(); showToast('انتهى وقت التركيز! استرح قليلاً 🎉'); }
+  }, 1000);
+}
+
+function pauseFocusTimer() {
+  focusTimerRunning = false;
+  clearInterval(focusTimerInterval);
+  const btn = document.getElementById('focus-start-btn');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+  btn.className = 'focus-btn focus-btn-start';
+  document.getElementById('focus-timer-status').textContent = 'متوقف مؤقتاً';
+}
+
+function stopFocusTimer() {
+  pauseFocusTimer();
+  focusTimerSeconds = focusTimerTotal;
+  updateFocusDisplay();
+  document.getElementById('focus-timer-status').textContent = 'تم الإيقاف';
+}
+
+function resetFocusTimer() {
+  stopFocusTimer();
+  document.getElementById('focus-timer-status').textContent = 'جاهز للبدء';
+}
+
+function updateFocusDisplay() {
+  const m = Math.floor(focusTimerSeconds/60);
+  const s = focusTimerSeconds % 60;
+  document.getElementById('focus-timer-display').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  const circ = 2 * Math.PI * 90; // r=90 for 200px svg
+  const offset = circ - (focusTimerSeconds/focusTimerTotal)*circ;
+  document.getElementById('focus-ring-progress').style.strokeDasharray = circ;
+  document.getElementById('focus-ring-progress').style.strokeDashoffset = offset;
+}
+
+// ═══════════════════════════════════════
+// MODALS
+// ═══════════════════════════════════════
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+function showToast(msg, type) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + (type||'success');
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+function escapeHtml(text) {
+  const d = document.createElement('div'); d.textContent = text; return d.innerHTML;
+}
+function escapeAttr(text) {
+  return (text||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ═══════════════════════════════════════
+// DATA MANAGEMENT
+// ═══════════════════════════════════════
+function exportData() {
+  const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'mokhatti_backup_'+new Date().toISOString().split('T')[0]+'.json';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('تم تصدير البيانات ✓');
+}
+function importData() { document.getElementById('import-file-input').click(); }
+function handleImportFile(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.lists && Array.isArray(data.lists)) { appData = { ...appData, ...data }; saveData(); init(); showToast('تم استيراد البيانات ✓'); }
+      else showToast('ملف غير صالح', 'error');
+    } catch { showToast('خطأ في قراءة الملف', 'error'); }
+  };
+  reader.readAsText(file); event.target.value = '';
+}
+function clearAllData() {
+  if (!confirm('هل أنت متأكد من مسح كل البيانات؟ لا يمكن التراجع!')) return;
+  appData = { targetDate: null, lists: [], theme: 'ocean', weeklyStats: {}, userName: '', userTitle: '' };
+  saveData(); init(); showToast('تم مسح كل البيانات');
+}
+
+// ═══════════════════════════════════════
+// START
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', init);
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('show');
+  });
+});
+</script>
+
+<script>
+// Netlify-ready Service Worker
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'mokhatti-v3';
+    self.addEventListener('install', e => { self.skipWaiting(); });
+    self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
+    self.addEventListener('fetch', e => {
+      e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+    });
+  `;
+  try {
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+  } catch(e) {}
+}
+</script>
+</body>
+</html>
